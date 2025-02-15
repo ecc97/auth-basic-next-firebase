@@ -1,0 +1,221 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+}
+
+.registerCard {
+  display: flex;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  max-width: 1000px;
+  min-height: 600px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    min-height: auto;
+  }
+}
+
+.leftPanel {
+  flex: 1;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    max-width: 80%;
+  }
+
+  @media (max-width: 768px) {
+    padding: 30px;
+  }
+}
+
+.rightPanel {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+  }
+}
+
+.socialLogin {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.socialButton {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  color: #666;
+
+  &:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+  }
+}
+
+.divider {
+  color: #666;
+  margin-bottom: 30px;
+  position: relative;
+  width: 100%;
+  text-align: center;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background: #ddd;
+  }
+
+  &::before {
+    left: 0;
+  }
+
+  &::after {
+    right: 0;
+  }
+}
+
+.form {
+  width: 100%;
+  max-width: 320px;
+}
+
+.inputGroup {
+  position: relative;
+  margin-bottom: 20px;
+
+  input {
+    width: 100%;
+    padding: 12px 40px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #ff6b6b;
+      box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.1);
+    }
+
+    &.errorInput {
+      border-color: #ff4646;
+    }
+  }
+}
+
+.inputIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.errorMessage {
+  color: #ff4646;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  margin-left: 12px;
+}
+
+.signInButton,
+.signUpButton {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.signInButton {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  margin-top: 20px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+  }
+}
+
+.signUpButton {
+  background: #ff6b6b;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #ff5252;
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 768px) {
+  .registerCard {
+    margin: 20px;
+  }
+
+  .leftPanel,
+  .rightPanel {
+    padding: 30px;
+  }
+
+  .leftPanel {
+    p {
+      max-width: 100%;
+    }
+  }
+}
