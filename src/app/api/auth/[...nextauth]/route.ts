@@ -1,5 +1,8 @@
 import NextAuth, { NextAuthOptions, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { FirebaseError } from "firebase/app";
 
 interface AuthToken {
   id?: string;
@@ -7,7 +10,7 @@ interface AuthToken {
 }
 
 interface AuthUser {
-  id: string;
+  id: string; 
   name: string;
   email: string;
   token: string;
@@ -28,22 +31,36 @@ const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Correo Electrónico", type: "text" },
+        email: { label: "Correo Electrónico", type: "text" },
         password: { label: "Contraseña", type: "password" },
       },
       authorize: async (credentials) => {
-        const res = await fetch("http://localhost:3000/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(credentials),
-        });
-        const user = await res.json();
-        if (user) {
-          return user;
-        } else {
-          return null;
+        if (!credentials?.email || !credentials.password) {
+          throw new Error("Email and password are required");
+        }
+
+        try {
+          const userCredential = await signInWithEmailAndPassword(
+            auth,
+            credentials.email,
+            credentials.password
+          );
+
+          const user = userCredential.user;
+          const token = await user.getIdToken();
+
+          return {
+            id: user.uid,
+            name: user.displayName || "",
+            email: user.email,
+            token,
+          };
+          
+        } catch (error) {
+          if (error instanceof FirebaseError) {
+            throw new Error('Error authenticating' + error.message);
+          }
+          throw new Error('Error unknown authenticating');
         }
       },
     }),
@@ -51,6 +68,7 @@ const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  secret: '4f2dd9cb2932e93c2544eba04e57d267b64e7ed43c8c06ba4e9665ef00ba621f',
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
