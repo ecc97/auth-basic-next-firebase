@@ -1,7 +1,8 @@
 import NextAuth, { NextAuthOptions, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
+import { doc,getDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
 
 interface AuthToken {
@@ -49,9 +50,16 @@ const authOptions: NextAuthOptions = {
           const user = userCredential.user;
           const token = await user.getIdToken();
 
+          const userDocRef = doc(db, "users", user.uid);
+          const userDoc = await getDoc(userDocRef);
+          if (!userDoc.exists()) {
+            throw new Error("User not found in database");
+          }
+          const userData = userDoc.data();
+
           return {
             id: user.uid,
-            name: user.displayName || "",
+            name: userData.name,
             email: user.email,
             token,
           };
@@ -60,7 +68,7 @@ const authOptions: NextAuthOptions = {
           if (error instanceof FirebaseError) {
             throw new Error('Error authenticating' + error.message);
           }
-          throw new Error('Error unknown authenticating');
+          throw new Error('Error unknown authenticating or invalid credentials');
         }
       },
     }),
@@ -87,7 +95,7 @@ const authOptions: NextAuthOptions = {
   },
 };
 
-export default NextAuth(authOptions);
+export const authHandler = NextAuth(authOptions);
 
 export const GET = NextAuth(authOptions);
 export const POST = NextAuth(authOptions);
