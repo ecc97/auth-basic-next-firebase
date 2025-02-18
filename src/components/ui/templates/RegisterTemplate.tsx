@@ -6,15 +6,44 @@ import { SocialLoginGroup } from '../molecules/SocialGroup/SocialLoginGroup';
 import { RegisterForm } from '../molecules/Form/RegisterForm';
 import styles from '@/assets/sass/register.module.scss'
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 function RegisterTemplate() {
-    const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
     try {
-      // Handle registration logic here
-      console.log(data);
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        }),
+      })
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Error creating user");
+      }
+      console.log('Registration successful:', result);
+      // router.push('/login');
+
+      await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+      router.push('/profile');
+
+
     } catch (error) {
       console.error(error);
     } finally {
@@ -30,10 +59,10 @@ function RegisterTemplate() {
           <Link href='/login' className={styles.signInButton}>SIGN IN</Link>
         </LeftPanel>
         <RightPanel className={styles.rightPanel}>
-            <h2>Create Account</h2>
-            <SocialLoginGroup />
-            <p className={styles.divider}>or use your email for registration</p>
-            <RegisterForm onSubmit={onSubmit} isLoading={isLoading} />
+          <h2>Create Account</h2>
+          <SocialLoginGroup />
+          <p className={styles.divider}>or use your email for registration</p>
+          <RegisterForm onSubmit={onSubmit} isLoading={isLoading} />
         </RightPanel>
       </div>
     </div>

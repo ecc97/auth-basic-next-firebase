@@ -1,20 +1,34 @@
 "use client"
 import React, { useState } from 'react'
+import { signIn } from 'next-auth/react';
 import LeftPanel from '../organism/LeftPanel';
 import RightPanel from '../organism/RightPanel';
 import { SocialLoginGroup } from '../molecules/SocialGroup/SocialLoginGroup';
 import { LoginForm } from '../molecules/Form/LoginForm';
 import styles from '@/assets/sass/login.module.scss'
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 function LoginTemplate() {
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = async (data: any) => {
         setIsLoading(true);
         try {
-            // Handle login logic here
-            console.log(data);
+            const result = await signIn('credentials', {
+                redirect: false,
+                email: data.email,
+                password: data.password,
+            })
+
+            if (result?.error) {
+                console.error('Login failed:', result.error);
+                throw new Error(result.error)
+            } 
+            console.log('Login successful:', result);
+            router.push('/profile')
+
         } catch (error) {
             console.error(error);
         } finally {
