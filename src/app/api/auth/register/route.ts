@@ -2,10 +2,12 @@ import { NextResponse } from "next/server";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
+import { IRegisterRequest, IRegisterResponse } from "@/interfaces/IRegister";
 
 
 export async function POST(request: Request) {
-    const { name, email, password } = await request.json();
+    const body: IRegisterRequest = await request.json();
+    const { name, email, password } = body;
 
     if (!name || !email || !password) {
         return NextResponse.json({ error: "All fields are required." }, { status: 400 });
@@ -34,7 +36,7 @@ export async function POST(request: Request) {
         console.log("Token recibido:", token);
 
 
-        return NextResponse.json({ message: "User created successfully", user: userDoc }, { status: 200 });
+        return NextResponse.json<IRegisterResponse>({ message: "User created successfully", user: userDoc }, { status: 200 });
     } catch (error: any) {
         if (error.code === "auth/email-already-in-use") {
             return NextResponse.json({ error: "El correo ya está registrado. Intenta iniciar sesión." }, { status: 400 });

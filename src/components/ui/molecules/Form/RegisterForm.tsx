@@ -3,8 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Mail, Lock, User } from "lucide-react";
 import { FormInput } from "../../atoms/Input/Input";
+import Button from "../../atoms/Button/Button";
 import stylesFormRegister from "./form.module.scss";
 import stylesBtnRegister from "@/assets/sass/register.module.scss";
+import { IRegisterRequest } from "@/interfaces/IRegister";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -12,7 +14,7 @@ const registerSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-type RegisterFormData = z.infer<typeof registerSchema>;
+type RegisterFormData = IRegisterRequest;
 
 interface RegisterFormProps {
   onSubmit: (data: RegisterFormData) => Promise<void>;
@@ -30,7 +32,7 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={stylesFormRegister.form}>
-      <FormInput
+      <FormInput<IRegisterRequest>
         type="text"
         placeholder="Name"
         Icon={User}
@@ -38,7 +40,7 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
         register={register}
         name="name"
       />
-      <FormInput
+      <FormInput<IRegisterRequest>
         type="email"
         placeholder="Email"
         Icon={Mail}
@@ -46,7 +48,7 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
         register={register}
         name="email"
       />
-      <FormInput
+      <FormInput<IRegisterRequest>
         type="password"
         placeholder="Password"
         Icon={Lock}
@@ -54,13 +56,13 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
         register={register}
         name="password"
       />
-      <button
+      <Button
         type="submit"
         className={stylesBtnRegister.signUpButton}
         disabled={isLoading}
       >
         {isLoading ? "Creating Account..." : "SIGN UP"}
-      </button>
+      </Button>
     </form>
   );
 }

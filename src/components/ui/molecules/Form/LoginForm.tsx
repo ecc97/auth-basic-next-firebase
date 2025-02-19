@@ -6,13 +6,14 @@ import { FormInput } from "../../atoms/Input/Input";
 import Button from "../../atoms/Button/Button";
 import stylesBtnLogin from "@/assets/sass/login.module.scss";
 import stylesFormLogin from './form.module.scss'
+import { ILoginRequest } from "@/interfaces/ILogin";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-type LoginFormData = z.infer<typeof loginSchema>;
+type LoginFormData = z.infer<typeof loginSchema> & ILoginRequest;
 
 interface LoginFormProps {
   onSubmit: (data: LoginFormData) => Promise<void>;
@@ -30,7 +31,7 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={stylesFormLogin.form}>
-      <FormInput
+      <FormInput<ILoginRequest>
         type="email"
         placeholder="Email"
         Icon={Mail}
@@ -38,7 +39,7 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
         register={register}
         name="email"
       />
-      <FormInput
+      <FormInput<ILoginRequest>
         type="password"
         placeholder="Password"
         Icon={Lock}

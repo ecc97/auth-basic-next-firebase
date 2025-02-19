@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { doc,getDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
+import { ILoginRequest, ILoginResponse } from "@/interfaces/ILogin";
 
 interface AuthToken {
   id?: string;
@@ -41,10 +42,11 @@ const authOptions: NextAuthOptions = {
         }
 
         try {
+          const { email, password } = credentials as ILoginRequest;
           const userCredential = await signInWithEmailAndPassword(
             auth,
-            credentials.email,
-            credentials.password
+            email,
+            password
           );
 
           const user = userCredential.user;
@@ -57,10 +59,17 @@ const authOptions: NextAuthOptions = {
           }
           const userData = userDoc.data();
 
+          const response: ILoginResponse = {
+            user: {
+              email: user.email!,
+              name: userData.name,
+            }
+          }
+
           return {
             id: user.uid,
-            name: userData.name,
-            email: user.email,
+            name: response.user?.name,
+            email: response.user?.email,
             token,
           };
           

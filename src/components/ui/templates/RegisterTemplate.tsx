@@ -8,12 +8,13 @@ import styles from '@/assets/sass/register.module.scss'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import { IRegisterRequest, IRegisterResponse } from '@/interfaces/IRegister';
 
 function RegisterTemplate() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: IRegisterRequest) => {
     setIsLoading(true);
     try {
       const response = await fetch('/api/auth/register', {
@@ -28,7 +29,7 @@ function RegisterTemplate() {
         }),
       })
 
-      const result = await response.json();
+      const result: IRegisterResponse = await response.json();
 
       if (!response.ok) {
         throw new Error(result.error || "Error creating user");

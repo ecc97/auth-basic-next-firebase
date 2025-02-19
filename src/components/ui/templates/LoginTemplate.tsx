@@ -8,12 +8,13 @@ import { LoginForm } from '../molecules/Form/LoginForm';
 import styles from '@/assets/sass/login.module.scss'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { ILoginRequest } from '@/interfaces/ILogin';
 
 function LoginTemplate() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: ILoginRequest) => {
         setIsLoading(true);
         try {
             const result = await signIn('credentials', {
