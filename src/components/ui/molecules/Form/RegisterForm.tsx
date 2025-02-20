@@ -27,6 +27,8 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
     resolver: zodResolver(registerSchema),
   });
 

@@ -8,14 +8,16 @@ import { LoginForm } from '../molecules/Form/LoginForm';
 import styles from '@/assets/sass/login.module.scss'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ILoginRequest } from '@/interfaces/ILogin';
+import { ILoginRequest, IErrorResponse } from '@/interfaces/ILogin';
 
 function LoginTemplate() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const onSubmit = async (data: ILoginRequest) => {
         setIsLoading(true);
+        setError(null);
         try {
             const result = await signIn('credentials', {
                 redirect: false,
@@ -24,14 +26,20 @@ function LoginTemplate() {
             })
 
             if (result?.error) {
-                console.error('Login failed:', result.error);
+                console.log('Login failed:', result.error);
                 throw new Error(result.error)
             } 
             console.log('Login successful:', result);
             router.push('/profile')
 
-        } catch (error) {
-            console.error(error);
+        } catch (error: unknown) {
+            console.log(error)
+            if (error instanceof Error) {
+                setError(error.message);
+                // throw new Error('Error authenticating' + error.message);
+            }
+            const errorResponse: IErrorResponse = error as IErrorResponse;
+            console.log(errorResponse);
         } finally {
             setIsLoading(false);
         }
@@ -45,6 +53,7 @@ function LoginTemplate() {
                     <SocialLoginGroup />
                     <p className={styles.divider}>or use your account</p>
                     <LoginForm onSubmit={onSubmit} isLoading={isLoading} />
+                    {error && <span className={styles.errorMessage}>{error}</span>}
                 </LeftPanel>
                 <RightPanel className={styles.rightPanel}>
                     <h1>Hello, Friend!</h1>

@@ -10,5 +10,11 @@ export interface ILoginResponse {
         email: string;
         name?: string;
     };
+    error?: IErrorResponse;
+}
+
+export interface IErrorResponse {
     error?: string;
+    status?: number; 
+    message?: string;
 }

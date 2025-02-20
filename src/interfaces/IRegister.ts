@@ -12,5 +12,11 @@ export interface IRegisterResponse {
         email: string;
         createdAt: string;
     };
+    error?: IErrorResponse;
+}
+
+export interface IErrorResponse {
     error?: string;
+    status?: number; 
+    message?: string;
 }

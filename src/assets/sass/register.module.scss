@@ -158,10 +158,10 @@
 }
 
 .errorMessage {
+  display: block;
   color: #ff4646;
-  font-size: 0.85rem;
+  font-size: 1rem;
   margin-top: 5px;
-  margin-left: 12px;
 }
 
 .signInButton,

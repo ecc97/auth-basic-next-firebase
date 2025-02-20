@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "@/lib/firebase";
+import { auth, db } from "@/firebase/firebase";
 import { doc,getDoc } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
 import { ILoginRequest, ILoginResponse } from "@/interfaces/ILogin";
@@ -73,8 +73,17 @@ const authOptions: NextAuthOptions = {
             token,
           };
           
-        } catch (error) {
+        } catch (error: unknown) {
           if (error instanceof FirebaseError) {
+            if (error.code === "auth/invalid-credential") {
+              throw new Error('Error invalid credentials');
+            }
+            if (error.code === "auth/wrong-password") {
+              throw new Error('Error wrong password');
+            }
+            if (error.code === "auth/user-not-found") {
+              throw new Error('Error user not found');
+            }
             throw new Error('Error authenticating' + error.message);
           }
           throw new Error('Error unknown authenticating or invalid credentials');
