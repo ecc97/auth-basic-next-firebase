@@ -94,7 +94,7 @@ const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
-  secret: '4f2dd9cb2932e93c2544eba04e57d267b64e7ed43c8c06ba4e9665ef00ba621f',
+  secret: process.env.NEXTAUTH_SECRET || "secret",
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
