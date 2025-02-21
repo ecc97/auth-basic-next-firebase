@@ -1,0 +1,96 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.profileCard {
+    width: 800px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 600px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+        transform: translateY(-3px);
+    }
+
+    @media (width <= 768px) {
+        flex-direction: column;
+        width: 400px;
+        min-height: auto;
+    }
+}
+
+
+.avatar {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.profileImage {
+    background: #ffdee3;
+    border-radius: 50%;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+
+    svg {
+        width: 200px;
+        height: 200px;
+    }
+    
+    @media (width <= 768px) {
+        width: 100px;
+        height: 100px;
+
+        svg {
+            width: auto;
+            height: auto;
+        }
+    }
+}
+
+.info {
+    flex: 1;
+    text-align: center;
+
+    h1 {
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    p {
+        font-size: 0.95rem;
+        color: #666;
+    }
+}
+
+.logoutButton {
+    margin-top: 15px;
+    background: #ffdee3;
+    color: #7a4c54;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+        background: #f9cdd3;
+    }
+}
