@@ -1,17 +1,19 @@
-"use client";
-import { signOut, useSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/authOptions";
+import { redirect } from "next/navigation";
+import ProfileTemplate from "@/components/ui/templates/ProfileTemplate";
 
-export default function Dashboard() {
-  const { data: session, status } = useSession();
 
-  if (status === "loading") return <p>Cargando...</p>;
-  if (!session) return <p>No has iniciado sesión</p>;
+export default async function ProfilePage() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return redirect("/login");
+  }
 
   return (
-    <div>
-      <h1>Bienvenido, {session.user.name}!</h1>
-      <p>Email: {session.user.email}</p>
-      <button onClick={() => signOut()}>Cerrar sesión</button>
+    <div className="fade-enter">
+      <ProfileTemplate session={session} />
     </div>
   );
 }
