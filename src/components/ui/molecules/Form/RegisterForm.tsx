@@ -12,9 +12,15 @@ const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-});
+  confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
+})
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+;
 
-type RegisterFormData = IRegisterRequest;
+type RegisterFormData = IRegisterRequest & { confirmPassword: string };
 
 interface RegisterFormProps {
   onSubmit: (data: RegisterFormData) => Promise<void>;
@@ -57,6 +63,14 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
         error={errors.password?.message}
         register={register}
         name="password"
+      />
+      <FormInput<RegisterFormData>
+        type="password"
+        placeholder="Confirm Password"
+        Icon={Lock}
+        error={errors.confirmPassword?.message}
+        register={register}
+        name="confirmPassword"
       />
       <Button
         type="submit"
