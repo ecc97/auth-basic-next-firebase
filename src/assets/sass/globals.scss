@@ -6,6 +6,19 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --bg-color: #ffffff;
+  --bg-color-profile: #f5f7fa;
+  --text-color: #333;
+  --text-color-divider: #666;
+  --bg-linear-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+[data-theme="dark"] {
+  --bg-color: #1e1e1e;
+  --text-color: #f5f5f5;
+  --text-color-divider: #ccc;
+  --bg-linear-gradient: linear-gradient(135deg, #222 0%, #111 100%);
+  --bg-color-profile: #04172f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -77,7 +90,9 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background 0.3s ease, color 0.3s ease;
   }
 }
 
